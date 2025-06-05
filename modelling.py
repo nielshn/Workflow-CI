@@ -48,6 +48,7 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
+    # Autolog all params, metrics, model
     mlflow.sklearn.autolog()
 
     # Load dataset
