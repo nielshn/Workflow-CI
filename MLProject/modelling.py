@@ -1,5 +1,6 @@
 # modelling.py
 import pandas as pd
+import numpy as np
 import argparse
 import mlflow
 import mlflow.sklearn
@@ -47,6 +48,9 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
+    # Set experiment
+    mlflow.set_experiment("Wine Quality")
+
     # Autolog all params, metrics, model
     mlflow.sklearn.autolog()
 
@@ -60,7 +64,6 @@ if __name__ == "__main__":
         X, y, test_size=0.2, random_state=42
     )
 
-    # Run experiment
-    with mlflow.start_run():  # Tidak pakai nested
+    with mlflow.start_run():
         model = train_model(X_train, y_train)
         evaluate_model(model, X_val, y_val)
