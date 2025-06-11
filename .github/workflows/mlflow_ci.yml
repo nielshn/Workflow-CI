@@ -30,24 +30,17 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/wine-mlflow:latest
 
-  run-training:
+  run-training-from-docker:
     needs: build-and-push
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Pull built Docker image
+        run: docker pull ${{ secrets.DOCKER_USERNAME }}/wine-mlflow:latest
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
-
-      - name: Install dependencies
+      - name: Run MLflow Project from Docker image
         run: |
-          pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Run MLflow training
-        run: |
-          mlflow run . --env-manager=local
+          docker run --rm \
+            -e MLFLOW_TRACKING_URI=${{ secrets.MLFLOW_TRACKING_URI }} \
+            -e MLFLOW_EXPERIMENT_NAME=WineExperiment \
+            ${{ secrets.DOCKER_USERNAME }}/wine-mlflow:latest
