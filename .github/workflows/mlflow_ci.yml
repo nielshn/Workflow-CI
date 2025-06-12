@@ -64,13 +64,15 @@ jobs:
         with:
           name: mlflow-artifacts
           path: model_output
-      - name: Decode GDrive credentials
+      - name: Decode GDrive OAuth client secrets
         run: |
-          echo "${{ secrets.GDRIVE_CREDENTIALS_JSON }}" | base64 -d > scripts/client_secrets.json
+          echo "${{ secrets.GDRIVE_CLIENT_SECRETS_JSON }}" | base64 -d > scripts/client_secrets.json
+
       - name: Install required libs
         run: |
           pip install --upgrade pip
           pip install pydrive
+
       - name: Upload model artifacts to Google Drive
         run: |
           python scripts/upload_to_drive.py
