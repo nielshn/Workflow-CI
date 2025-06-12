@@ -46,7 +46,7 @@ jobs:
 
       - name: Fix mlruns permission
         run: |
-          sudo chown -R $UID:$GID mlruns/
+          sudo chown -R $(id -u):$(id -g) mlruns/
 
       - name: Upload model artifact to GitHub (skilled/advanced)
         uses: actions/upload-artifact@v4
