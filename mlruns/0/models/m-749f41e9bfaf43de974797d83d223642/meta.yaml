@@ -1,0 +1,30 @@
+artifact_location: file:///D:/Backup/learning-experiences/magang-stupend/Laskar%20AI/Membangun%20Sistem%20Machine%20Learning/SMSML_DanielSiahaan/Workflow-CI/mlruns/0/models/m-749f41e9bfaf43de974797d83d223642/artifacts
+creation_timestamp: 1749696568142
+experiment_id: '0'
+last_updated_timestamp: 1749696571188
+model_id: m-749f41e9bfaf43de974797d83d223642
+model_type: null
+name: model
+params:
+  bootstrap: 'True'
+  ccp_alpha: '0.0'
+  class_weight: None
+  criterion: gini
+  max_depth: None
+  max_features: sqrt
+  max_leaf_nodes: None
+  max_samples: None
+  min_impurity_decrease: '0.0'
+  min_samples_leaf: '1'
+  min_samples_split: '2'
+  min_weight_fraction_leaf: '0.0'
+  monotonic_cst: None
+  n_estimators: '100'
+  n_jobs: None
+  oob_score: 'False'
+  random_state: '42'
+  verbose: '0'
+  warm_start: 'False'
+source_run_id: 9cf9739c7cb841d9a54c5ce0b4f582a7
+status: 2
+status_message: null
