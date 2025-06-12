@@ -66,7 +66,7 @@ jobs:
           path: model_output
       - name: Decode GDrive OAuth client secrets
         run: |
-          echo "${{ secrets.GDRIVE_CLIENT_SECRETS_JSON }}" | base64 -d > scripts/client_secrets.json
+          echo "${{ secrets.GDRIVE_CLIENT_SECRETS_JSON }}"
 
       - name: Install required libs
         run: |
