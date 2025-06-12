@@ -19,3 +19,4 @@ RUN pip install mlflow==2.22.0
 COPY MLProject/ .
 
 CMD ["mlflow", "run", ".", "-e", "main"]
+

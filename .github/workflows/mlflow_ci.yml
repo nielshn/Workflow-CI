@@ -3,14 +3,11 @@ name: Wine MLflow Docker CI
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
   workflow_dispatch:
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -34,7 +31,6 @@ jobs:
   run-training-from-docker:
     needs: build-and-push
     runs-on: ubuntu-latest
-
     steps:
       - name: Pull built Docker image
         run: docker pull ${{ secrets.DOCKER_USERNAME }}/wine-mlflow:latest
@@ -45,12 +41,6 @@ jobs:
             -e MLFLOW_TRACKING_URI=${{ secrets.MLFLOW_TRACKING_URI }} \
             -e MLFLOW_EXPERIMENT_NAME=WineExperiment \
             ${{ secrets.DOCKER_USERNAME }}/wine-mlflow:latest
-
-      - name: Upload model artifact to GitHub (skilled/advanced)
-        uses: actions/upload-artifact@v4
-        with:
-          name: mlflow-artifacts
-          path: MLProject/mlruns/
   upload-to-gdrive:
     needs: run-training-from-docker
     runs-on: ubuntu-latest
