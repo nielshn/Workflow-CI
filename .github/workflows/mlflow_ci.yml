@@ -1,0 +1,78 @@
+name: Wine MLflow Docker CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/wine-mlflow:latest
+
+  run-training-from-docker:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Pull built Docker image
+        run: docker pull ${{ secrets.DOCKER_USERNAME }}/wine-mlflow:latest
+
+      - name: Run MLflow Project from Docker image
+        run: |
+          docker run --rm \
+            -e MLFLOW_TRACKING_URI=${{ secrets.MLFLOW_TRACKING_URI }} \
+            -e MLFLOW_EXPERIMENT_NAME=WineExperiment \
+            ${{ secrets.DOCKER_USERNAME }}/wine-mlflow:latest
+
+      - name: Upload model artifact to GitHub (skilled/advanced)
+        uses: actions/upload-artifact@v4
+        with:
+          name: mlflow-artifacts
+          path: MLProject/mlruns/
+  upload-to-gdrive:
+    needs: run-training-from-docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Download ML artifacts from previous job
+        uses: actions/download-artifact@v4
+        with:
+          name: mlflow-artifacts
+          path: model_output
+
+      - name: Decode GDrive credentials
+        run: |
+          echo "${{ secrets.GDRIVE_CREDENTIALS_JSON }}" | base64 -d > creds.json
+
+      - name: Install required libs
+        run: |
+          pip install --upgrade pip
+          pip install pydrive
+
+      - name: Upload model artifacts to Google Drive
+        run: |
+          python scripts/upload_to_drive.py

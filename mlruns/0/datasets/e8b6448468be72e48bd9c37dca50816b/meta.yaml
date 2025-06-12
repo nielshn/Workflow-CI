@@ -1,0 +1,15 @@
+digest: dd7ddf3a
+name: dataset
+profile: '{"num_rows": 4157, "num_elements": 49884}'
+schema: '{"mlflow_colspec": [{"type": "double", "name": "fixed acidity", "required":
+  true}, {"type": "double", "name": "volatile acidity", "required": true}, {"type":
+  "double", "name": "citric acid", "required": true}, {"type": "double", "name": "residual
+  sugar", "required": true}, {"type": "double", "name": "chlorides", "required": true},
+  {"type": "double", "name": "free sulfur dioxide", "required": true}, {"type": "double",
+  "name": "total sulfur dioxide", "required": true}, {"type": "double", "name": "density",
+  "required": true}, {"type": "double", "name": "pH", "required": true}, {"type":
+  "double", "name": "sulphates", "required": true}, {"type": "double", "name": "alcohol",
+  "required": true}, {"type": "double", "name": "wine_type_white", "required": true}]}'
+source: '{"tags": {"mlflow.user": "Asus", "mlflow.source.name": ".\\modelling.py",
+  "mlflow.source.type": "LOCAL", "mlflow.source.git.commit": "cf828a306b016d540709c94ca2ba44efa2e680d4"}}'
+source_type: code
