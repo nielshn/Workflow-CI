@@ -35,34 +35,38 @@ jobs:
       - name: Pull built Docker image
         run: docker pull ${{ secrets.DOCKER_USERNAME }}/wine-mlflow:latest
 
-      - name: Run MLflow Project from Docker image
+      - name: Run MLflow Project from Docker image (with artifact output)
         run: |
+          mkdir -p mlruns
           docker run --rm \
+            -v ${{ github.workspace }}/mlruns:/app/mlruns \
             -e MLFLOW_TRACKING_URI=${{ secrets.MLFLOW_TRACKING_URI }} \
             -e MLFLOW_EXPERIMENT_NAME=WineExperiment \
             ${{ secrets.DOCKER_USERNAME }}/wine-mlflow:latest
+
+      - name: Upload model artifact to GitHub (skilled/advanced)
+        uses: actions/upload-artifact@v4
+        with:
+          name: mlflow-artifacts
+          path: mlruns/
   upload-to-gdrive:
     needs: run-training-from-docker
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-
       - name: Download ML artifacts from previous job
         uses: actions/download-artifact@v4
         with:
           name: mlflow-artifacts
           path: model_output
-
       - name: Decode GDrive credentials
         run: |
-          echo "${{ secrets.GDRIVE_CREDENTIALS_JSON }}" | base64 -d > creds.json
-
+          echo "${{ secrets.GDRIVE_CREDENTIALS_JSON }}" | base64 -d > scripts/client_secrets.json
       - name: Install required libs
         run: |
           pip install --upgrade pip
           pip install pydrive
-
       - name: Upload model artifacts to Google Drive
         run: |
           python scripts/upload_to_drive.py
