@@ -35,21 +35,18 @@ jobs:
       - name: Pull built Docker image
         run: docker pull ${{ secrets.DOCKER_USERNAME }}/wine-mlflow:latest
 
-      - name: Get runner UID and GID
-        id: ids
-        run: |
-          echo "uid=$(id -u)" >> $GITHUB_OUTPUT
-          echo "gid=$(id -g)" >> $GITHUB_OUTPUT
-
       - name: Run MLflow Project from Docker image (with artifact output)
         run: |
           mkdir -p mlruns
           docker run --rm \
             -v ${{ github.workspace }}/mlruns:/app/mlruns \
-            --user ${{ steps.ids.outputs.uid }}:${{ steps.ids.outputs.gid }} \
             -e MLFLOW_TRACKING_URI=${{ secrets.MLFLOW_TRACKING_URI }} \
             -e MLFLOW_EXPERIMENT_NAME=WineExperiment \
             ${{ secrets.DOCKER_USERNAME }}/wine-mlflow:latest
+
+      - name: Fix mlruns permission
+        run: |
+          sudo chown -R $UID:$GID mlruns/
 
       - name: Upload model artifact to GitHub (skilled/advanced)
         uses: actions/upload-artifact@v4
