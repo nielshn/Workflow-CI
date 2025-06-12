@@ -20,3 +20,4 @@ COPY MLProject/ .
 
 CMD ["mlflow", "run", ".", "-e", "main", "--env-manager=local"]
 
+

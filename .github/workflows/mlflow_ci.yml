@@ -34,6 +34,7 @@ jobs:
     steps:
       - name: Pull built Docker image
         run: docker pull ${{ secrets.DOCKER_USERNAME }}/wine-mlflow:latest
+
       - name: Run MLflow Project from Docker image
         run: |
           docker run --rm \
