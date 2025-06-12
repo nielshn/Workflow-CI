@@ -7,11 +7,8 @@ FOLDER_ID = "1ycZSe3JOL0avT2peCq8ubQoZB97Mwox4"
 ARTIFACTS_DIR = "model_output"
 
 gauth = GoogleAuth()
-gauth.LoadCredentialsFile("./client_secrets.json")
-if not gauth.credentials:
-    gauth.LocalWebserverAuth()
-else:
-    gauth.Authorize()
+gauth.LoadClientConfigFile("client_secrets.json")
+gauth.LocalWebserverAuth()
 drive = GoogleDrive(gauth)
 
 for root, dirs, files in os.walk(ARTIFACTS_DIR):
