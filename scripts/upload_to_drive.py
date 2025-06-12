@@ -7,7 +7,7 @@ FOLDER_ID = "1ycZSe3JOL0avT2peCq8ubQoZB97Mwox4"
 ARTIFACTS_DIR = "model_output"
 
 gauth = GoogleAuth()
-gauth.LoadClientConfigFile("client_secrets.json")
+gauth.LoadClientConfigFile("scripts/client_secrets.json")
 gauth.LocalWebserverAuth()
 drive = GoogleDrive(gauth)
 
